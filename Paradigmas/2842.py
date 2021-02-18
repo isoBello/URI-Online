@@ -11,19 +11,19 @@ def concatenar(a, b):
     else:
         k = size_a + 2
         n = size_b + 2
-        dinamic = [[0] * n for _ in range(k)]
+        dynamic = [[0] * n for _ in range(k)]
 
         for i in range(k - 1):
             for j in range(n - 1):
                 if not i:
-                    dinamic[i][j] = j
+                    dynamic[i][j] = j
                 elif not j:
-                    dinamic[i][j] = i
+                    dynamic[i][j] = i
                 elif a[i - 1] == b[j - 1]:
-                    dinamic[i][j] = 1 + dinamic[i - 1][j - 1]
+                    dynamic[i][j] = 1 + dynamic[i - 1][j - 1]
                 else:
-                    dinamic[i][j] = 1 + min(dinamic[i - 1][j], dinamic[i][j - 1])
-        return dinamic[size_a][size_b]
+                    dynamic[i][j] = 1 + min(dynamic[i - 1][j], dynamic[i][j - 1])
+        return dynamic[size_a][size_b]
 
 
 if __name__ == "__main__":
