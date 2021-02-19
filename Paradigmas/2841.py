@@ -1,39 +1,26 @@
 # -*- coding: utf-8 -*-
-from collections import defaultdict
 
 
 # Solving Dabriel e Sua Festa
-def fun_party(tree):
-    animation = []
-    grandchild = []
-
-    for k, node in tree.items():
-        if not node[1]:
-            pass
-        else:
-            for no in node[1]:
-                if tree[no][1]:
-                    for n in tree[no][1]:
-                        grandchild.append((n, tree[n][0]))
-        grands_fun = grands(grandchild)
-        childs_fun = childs(tree, k)
-        animation.append(max(tree[k][0] + grands_fun, childs_fun))
-
-    return animation[0]
-
-
-def grands(vo):
-    sum_fun = 0
-    for neto in vo:
-        sum_fun += neto[1]
-    return sum_fun
-
-
-def childs(tree, k):
-    sum_fun = 0
-    for node in tree[k][1]:
-        sum_fun += tree[node][0]
-    return sum_fun
+def solve(tree):
+    size = len(tree) + 1
+    dp = [[0] * size for _ in range(size)]
+    for i in range(1, size - 1):
+        k = 0
+        for j in range(1, size - 1):
+            if not tree[i][1] and i == j:
+                dp[i][j] = tree[i][0]
+            elif tree[i][1] and i == j:
+                dp[i][j] = tree[i][0]
+            elif tree[i][1] and j in tree[i][1]:
+                try:
+                    while k < len(tree[j][1]):
+                        no = tree[j][1][k]
+                        dp[i][j] = max(tree[i][0] + tree[no][0], tree[j][0])
+                        k += 1
+                except IndexError:
+                    dp[i][j] = max(tree[i][0] + 0, tree[j][0])
+    return dp
 
 
 def subordinados(boss, profits):
@@ -57,6 +44,6 @@ if __name__ == "__main__":
     chefes = list(map(int, input().split(" ")))
 
     chefes.insert(0, 0)
-
     C = subordinados(chefes, fun)
-    print(fun_party(C))
+
+    print(solve(C))
