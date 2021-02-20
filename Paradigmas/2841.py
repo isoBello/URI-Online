@@ -2,7 +2,7 @@
 
 
 # Solving Dabriel e Sua Festa
-def dfs(node, parent, dp, animation, t):
+def solve(node, parent, dp, animation, t):
     sum1 = 0
     sum2 = 0
 
@@ -10,7 +10,7 @@ def dfs(node, parent, dp, animation, t):
         if child == parent:
             continue
 
-        dfs(child, node, dp, animation, t)
+        solve(child, node, dp, animation, t)
 
         # Inclui o n-th nó e não inclui seus filhos
         sum1 += dp[child][1]
@@ -53,5 +53,5 @@ if __name__ == "__main__":
     dp = [[0] * 3 for _ in range(k)]
     tree[1].remove(0)
 
-    dfs(1, 1, dp, profit, tree)
+    solve(1, 1, dp, profit, tree)
     print(max(dp[1][0], dp[1][1]))
