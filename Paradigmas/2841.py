@@ -2,55 +2,51 @@
 
 
 # Solving Dabriel e Sua Festa
-def solve(tree, people):
-    length = people + 2
-    dp = [[-1] * 4 for _ in range(length)]
+def dfs(node, parent, d1, d2, profit, t):
+    sum1 = 0
+    sum2 = 0
+    for child in t[node]:
+        if child == parent:
+            continue
+        dfs(child, node, d1, d2, profit, t)
 
-    for i in range(length - 1):
-        for j in range(3):
-            if i == 0:
-                dp[i][j] = 0
-            elif i > 0 and j == 0:
-                child = tree[i][1]
-                fun_relates = 0
-                for c in child:
-                    fun_relates += tree[c][0]
-                dp[i][j] = fun_relates
-            elif i > 0 and j == 1:
-                child = tree[i][1]
-                fun_relates = 0
-                for c in child:
-                    for g in tree[c][1]:
-                        fun_relates += tree[g][0]
-                dp[i][j] = fun_relates + tree[i][0]
-            else:
-                dp[i][j] = max(dp[i][0], dp[i][1])
-                dp[length-1][i] = dp[i][j]
-    return max(dp[length-1])
+        # Inclui o n-th nó e não inclui seus filhos
+        sum1 += d2[child]
 
-
-def subordinados(boss, profits):
-    organization = {}
-    node = 1
-
-    for profit in profits:
-        if node in boss:
-            indices = [i+1 for i, x in enumerate(boss) if x == node]
-            infos = [profit, indices]
-        else:
-            infos = [profit, []]
-        organization[node] = infos
-        node += 1
-    return organization
+        # Não inclui o nó, então inclui seus filhos ou não
+        sum2 == max(d1[child], d2[child])
+    d1[node] = profit[node] + sum1
+    d1[node] = sum2
 
 
 if __name__ == "__main__":
     pessoas = int(input())
     fun = list(map(int, input().split(" ")))
     chefes = list(map(int, input().split(" ")))
+    tree = {}
 
-    size = max(set(chefes))
-    chefes.insert(0, 0)
-    C = subordinados(chefes, fun)
+    # Dummys
+    chefes.insert(0, -1)
+    chefes.insert(0, -1)
 
-    print(solve(C, size))
+    fun.insert(0, -1)
+    fun.insert(pessoas+1, -1)
+
+    for i in range(1, pessoas + 1):
+        if i in chefes:
+            subordinados = [j for j, x in enumerate(chefes) if x == i]
+            try:
+                subordinados.append(chefes[i])
+            except ValueError:
+                continue
+        else:
+            subordinados = chefes[i]
+            subordinados = [subordinados]
+        tree[i] = subordinados
+
+    dp1 = [0 for i in range(pessoas + 2)]
+    dp2 = [0 for i in range(pessoas + 2)]
+
+    tree[1].remove(-1)
+    dfs(1, 1, dp1, dp2, fun, tree)
+    print(max(dp1[1], dp2[1]))
