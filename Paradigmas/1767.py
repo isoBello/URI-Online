@@ -21,8 +21,9 @@ def solve(pac, valor, peso, M, W):
 def count_packs(pac, peso, M, W=51):
     qtPacks = 0
     qtPeso = 0
+    j = W - 1
     for i in range(pac, 1, -1):
-        for j in range(W, 0, -1):
+        while j > 0:
             if M[i][j] != M[i - 1][j]:
                 qtPacks += 1
                 qtPeso += peso[i]
