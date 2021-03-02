@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from collections import defaultdict
 W = 51
 PACKS = 101
 
@@ -52,7 +53,7 @@ if __name__ == "__main__":
         pac = int(input())
         for i in range(1, pac + 1):
             qt, peso = map(int, input().split(" "))
-            saco[i].append(Bag(qt, peso))
+            saco[i] = Bag(qt, peso)
         answer, peso, pcts = solve(pac, saco, M)
         output = "{} brinquedos" + "\n" + "Peso: {} kg" + "\n" + "sobra(m) {} pacote(s)" + "\n"
         print(output.format(answer, peso, pcts))
