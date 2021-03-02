@@ -15,20 +15,21 @@ def solve(pac, valor, peso, M, W):
                     M[i][j] = max(valor[i] + M[i - 1][j - peso[i]], M[i - 1][j])
     # A resposta ficará em dp[PACKS][W]
     # Agora precisamos analisar a quantidade de pacotes utilizados
-    return M[pac + 1][W - 1], count_packs(pac, peso, M, W=51)
+    pesoTotal, pcs = count_packs(pac, peso, M, W=51)
+    return M[pac][W - 1], pesoTotal, pcs
 
 
 def count_packs(pac, peso, M, W=51):
     qtPacks = 0
     qtPeso = 0
     j = W - 1
+
     for i in range(pac, 1, -1):
-        while j > 0:
-            if M[i][j] != M[i - 1][j]:
-                qtPacks += 1
-                qtPeso += peso[i]
-                if j - peso[i] >= 0:
-                    j -= peso[i]
+        if M[i][j] != M[i - 1][j]:
+            qtPacks += 1
+            qtPeso += peso[i]
+            if j - peso[i] >= 0:
+                j -= peso[i]
     return qtPeso, qtPacks
 
 
@@ -48,6 +49,6 @@ if __name__ == "__main__":
             peso[i] = w
             M = [[0] * 51 for _ in range(pac + 2)]  # 51 é o peso limite + 1
         answer, peso, pcts = solve(pac, valor, peso, M, W=51)
-        output = "{} brinquedos" + "\n" + "Peso: {} kg" + "\n" + "sobra(m) {} pacote(s)" + "\n"
-        print(output.format(answer, peso, pcts))
+        output = "{} brinquedos" + "\n" + "Peso: {} kg" + "\n" + "sobra(m) {} pacote(s)"
+        print(output.format(answer, peso, pac - pcts))
         casos -= 1
