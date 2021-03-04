@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict
+import operator
 
 tree = defaultdict(list)
 INT_MAX = 10000
@@ -12,7 +13,7 @@ class Point:
 
 
 def pointIsInPolygon(pol, p):
-    extreme = (INT_MAX, p.y)
+    extreme = Point(INT_MAX, p.y)
     count = index = 0
     while True:
         next = (index + 1) % len(pol)
@@ -71,16 +72,6 @@ def solve(a, b, pts):
                 tree[i].append(j)
 
 
-def getPoints(M, node):
-    degree = 1
-    if M[node] != -1:
-        return M[node]
-    for child in tree[node]:
-        degree = max(getPoints(child) + 1, degree)
-    ans = M[node] = degree
-    return ans
-
-
 if __name__ == "__main__":
     P, Xa, Xb = map(int, input().split(" "))
     points = []
@@ -96,8 +87,7 @@ if __name__ == "__main__":
     # Segunda abordagem: Determinar se o ponto está no polígono (a maioria são triângulos?) possivelmente não convexo.
     # Retorna True para pontos estritamente externos, e False para pontos restantes.
     solve(A, B, points)
-    answer = 0
-    M = [-1] * 123
-    for i in range(P):
-        answer = max(answer, getPoints(M, i))
-    print(answer)
+    answer = tree.values()
+    maxPoints = max(answer)
+    print(max(maxPoints))
+
