@@ -9,6 +9,23 @@ class Point:
         self.y = yCoord
 
 
+def pointIsInPolygon(pol, p):
+    k = len(pol)
+    c = False
+    for i in range(k):
+        j = (i + 1) % k
+        if compare(pol, p, i, j):
+            c = not c
+    return c
+
+
+def compare(pol, p, i, j):
+    if pol[i].y <= p.y < pol[j].y or pol[j].y <= p.y < pol[i].y:
+        if p.x < pol[i].x + (pol[j].x - pol[i].x) * (p.y - p[i].y) / (pol[j].y - pol[i].y):
+            return True
+    return False
+
+
 def solve(a, b, pts):
     for i in range(len(pts) + 1):
         polygon = [a, pts[i], b]
